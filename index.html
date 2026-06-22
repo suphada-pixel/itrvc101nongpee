@@ -3,227 +3,161 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>MindGuard AI Dashboard v3</title>
+<title>MindGuard AI v4</title>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <style>
-*{margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI',sans-serif}
+*{margin:0;padding:0;box-sizing:border-box;font-family:Segoe UI,sans-serif}
 body{background:#eef4ff}
 .sidebar{position:fixed;left:0;top:0;width:240px;height:100%;background:#071c46;color:#fff;padding:20px}
-.logo{font-size:28px;font-weight:bold}
-.subtitle{margin-top:10px;color:#74ffae}
-.menu{margin-top:40px}
-.menu div{padding:12px;margin-bottom:10px;background:#0b2c68;border-radius:10px}
+.logo{font-size:28px;font-weight:bold}.subtitle{color:#74ffae;margin-top:8px}
+.menu div{background:#0b2c68;padding:10px;border-radius:10px;margin-top:10px}
 .main{margin-left:260px;padding:20px}
-.header{background:#fff;padding:20px;border-radius:15px;display:flex;justify-content:space-between;align-items:center}
-.grid{display:grid;grid-template-columns:320px 1fr;gap:20px;margin-top:20px}
-.card{background:white;border-radius:20px;padding:20px;box-shadow:0 3px 12px rgba(0,0,0,.1)}
+.header,.card,.footer{background:#fff;border-radius:18px;padding:18px}
+.header{display:flex;justify-content:space-between}
+.grid{display:grid;grid-template-columns:340px 1fr;gap:18px;margin-top:18px}
+.card{box-shadow:0 2px 10px rgba(0,0,0,.1)}
 .score{text-align:center}
-.score-circle{width:220px;height:220px;margin:auto;border-radius:50%;background:conic-gradient(#00c853 0deg,#00c853 300deg,#ddd 300deg);display:flex;align-items:center;justify-content:center}
-.score-inner{width:170px;height:170px;background:white;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-direction:column}
-.score-value{font-size:60px;font-weight:bold;color:#003c9e}
-.status{font-size:24px;font-weight:bold;margin-top:10px}
-.dashboard{background:#071c46;border-radius:20px;padding:20px;color:white}
-.sensor-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:15px}
-.sensor{background:#0b2c68;padding:15px;border-radius:15px;text-align:center}
-.sensor-value{font-size:32px;font-weight:bold;margin-top:10px}
-.risk-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:15px;margin-top:15px}
-.risk{background:#103a8f;padding:15px;border-radius:15px;text-align:center}
-.ai{background:#e9fff0;padding:15px;border-left:5px solid #00c853;border-radius:10px;line-height:1.8;color:#222}
-.chart-box{background:white;padding:15px;border-radius:15px;margin-top:15px}
-.mascot{text-align:center;font-size:80px}
-.footer{margin-top:20px;background:white;padding:15px;border-radius:15px;text-align:center;color:#666}
-hr{margin:8px 0}
+.circle{width:220px;height:220px;border-radius:50%;margin:auto;background:conic-gradient(#00c853 0deg,#00c853 300deg,#ddd 300deg);display:flex;align-items:center;justify-content:center}
+.inner{width:170px;height:170px;background:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-direction:column}
+#score{font-size:58px;font-weight:bold;color:#003c9e}
+.dashboard{background:#071c46;color:#fff;border-radius:18px;padding:18px}
+.sensorGrid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.sensor{background:#0b2c68;padding:12px;border-radius:12px;text-align:center}
+.val{font-size:30px;font-weight:bold}
+.riskGrid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:10px}
+.risk{background:#103a8f;padding:12px;border-radius:12px;text-align:center}
+.ai{background:#e9fff0;color:#222;padding:12px;border-left:5px solid #00c853;border-radius:10px;margin-top:10px}
+.chartBox{background:#fff;border-radius:12px;padding:10px;margin-top:10px}
+.footer{margin-top:15px;text-align:center;color:#666}
 </style>
 </head>
 <body>
-
 <div class="sidebar">
 <div class="logo">🛡️ MindGuard AI</div>
 <div class="subtitle">น้องพี...พีกแล้วพักก่อน 💚</div>
 <div class="menu">
-<div>📊 Dashboard</div>
-<div>🌡️ Environment</div>
-<div>🤖 AI Analysis</div>
-<div>📈 Trend</div>
-<div>⚙️ Settings</div>
+<div>📊 Dashboard</div><div>🤖 AI Analysis</div><div>📈 Trends</div>
 </div>
 </div>
 
 <div class="main">
-<div class="header">
-<h1>Dashboard Real-time</h1>
-<div id="clock"></div>
-</div>
+<div class="header"><h2>Dashboard Real-time</h2><div id="clock"></div></div>
 
 <div class="grid">
 <div>
 <div class="card score">
 <h3>Wellness Score</h3><br>
-<div class="score-circle">
-<div class="score-inner">
-<div id="score" class="score-value">85</div>
-<div>/100</div>
-</div>
-</div>
-<div id="status" class="status">🟢 ปลอดภัย</div>
+<div class="circle"><div class="inner"><div id="score">85</div><div>/100</div></div></div>
+<h2 id="status">🟢 ปลอดภัย</h2>
 </div>
 
-<br>
+<div class="card" style="margin-top:15px">
+<h3>🐢 AI Situation Assessment</h3>
+<div id="situation" class="ai"></div>
 
-<div class="card">
-<div class="mascot">🐢</div>
+<h3 style="margin-top:10px">AI Analysis</h3>
+<div id="analysis" class="ai"></div>
 
-<h3>AI Analysis</h3><br>
-<div id="analysis" class="ai">กำลังวิเคราะห์ข้อมูล...</div>
-
-<br>
-
-<h3>AI Recommendation</h3><br>
-<div id="recommend" class="ai">กำลังวิเคราะห์...</div>
-
-<br>
+<h3 style="margin-top:10px">AI Recommendation</h3>
+<div id="recommend" class="ai"></div>
 
 <div class="ai">
-<div>🟢 ปลอดภัย <span id="safePercent" style="float:right">0%</span></div>
-<hr>
-<div>🟡 เฝ้าระวัง <span id="warnPercent" style="float:right">0%</span></div>
-<hr>
-<div>🔴 เสี่ยง <span id="riskPercent" style="float:right">0%</span></div>
+🟢 ปลอดภัย <span id="safePercent" style="float:right"></span><br>
+🟡 เฝ้าระวัง <span id="warnPercent" style="float:right"></span><br>
+🔴 เสี่ยง <span id="riskPercent" style="float:right"></span>
 </div>
 </div>
 </div>
 
 <div class="dashboard">
-<h2>MindGuard AI Dashboard</h2><br>
-
-<div class="sensor-grid">
-<div class="sensor">🌡️<div id="temp" class="sensor-value">29</div></div>
-<div class="sensor">💧<div id="humidity" class="sensor-value">62</div></div>
-<div class="sensor">🌫️<div id="air" class="sensor-value">350</div></div>
-<div class="sensor">🔊<div id="noise" class="sensor-value">52</div></div>
+<div class="sensorGrid">
+<div class="sensor">🌡️<div id="temp" class="val"></div></div>
+<div class="sensor">💧<div id="hum" class="val"></div></div>
+<div class="sensor">🌫️<div id="air" class="val"></div></div>
+<div class="sensor">🔊<div id="noise" class="val"></div></div>
 </div>
 
-<div class="risk-grid">
-<div class="risk">🟢 ปลอดภัย<h1 id="wr">85%</h1></div>
-<div class="risk">🟡 เฝ้าระวัง<h1 id="sr">10%</h1></div>
-<div class="risk">🔴 เสี่ยง<h1 id="mr">5%</h1></div>
+<div class="riskGrid">
+<div class="risk">🟢 ปลอดภัย<h2 id="wr"></h2></div>
+<div class="risk">🟡 เฝ้าระวัง<h2 id="sr"></h2></div>
+<div class="risk">🔴 เสี่ยง<h2 id="rr"></h2></div>
 </div>
 
-<div class="chart-box">
-<canvas id="chart"></canvas>
-</div>
+<div class="chartBox"><canvas id="chart"></canvas></div>
 </div>
 </div>
 
-<div class="footer">
-MindGuard AI เป็นระบบเฝ้าระวังสภาพแวดล้อมในพื้นที่ปิด ไม่ใช่อุปกรณ์ทางการแพทย์ และไม่ใช้เพื่อวินิจฉัยโรค
-</div>
+<div class="footer">MindGuard AI เป็นระบบเฝ้าระวังสภาพแวดล้อม ไม่ใช่อุปกรณ์ทางการแพทย์</div>
 </div>
 
 <script>
-setInterval(()=>{
-document.getElementById("clock").innerHTML=new Date().toLocaleString('th-TH');
-},1000);
+setInterval(()=>clock.innerHTML=new Date().toLocaleString('th-TH'),1000);
 
 const chart=new Chart(document.getElementById('chart'),{
 type:'line',
-data:{
-labels:[],
-datasets:[{
-label:'Wellness Score',
-data:[],
-borderColor:'#0f5ed7',
-fill:false
-}]
-}
+data:{labels:[],datasets:[{label:'Wellness Score',data:[],borderColor:'#0f5ed7'}]}
 });
 
 function updateDashboard(){
-
 let temp=28+Math.random()*8;
 let hum=50+Math.random()*35;
 let air=250+Math.random()*350;
 let noise=40+Math.random()*35;
 
+temp.innerHTML=temp;
 document.getElementById('temp').innerHTML=temp.toFixed(1);
-document.getElementById('humidity').innerHTML=Math.round(hum);
+document.getElementById('hum').innerHTML=Math.round(hum);
 document.getElementById('air').innerHTML=Math.round(air);
 document.getElementById('noise').innerHTML=Math.round(noise);
 
-let tempScore=25;
-let humScore=20;
-let airScore=35;
-let noiseScore=20;
-
-if(temp>33) tempScore=5;
-else if(temp>30) tempScore=15;
-
-if(hum>80 || hum<40) humScore=5;
-else if(hum>70) humScore=10;
-
-if(air>500) airScore=5;
-else if(air>350) airScore=20;
-
-if(noise>65) noiseScore=5;
-else if(noise>55) noiseScore=10;
+let tempScore=temp>33?5:(temp>30?15:25);
+let humScore=(hum>80||hum<40)?5:(hum>70?10:20);
+let airScore=air>500?5:(air>350?20:35);
+let noiseScore=noise>65?5:(noise>55?10:20);
 
 let wellness=tempScore+humScore+airScore+noiseScore;
+score.innerHTML=wellness;
 
-document.getElementById('score').innerHTML=wellness;
+let tempRisk=100-(tempScore/25*100);
+let humRisk=100-(humScore/20*100);
+let airRisk=100-(airScore/35*100);
+let noiseRisk=100-(noiseScore/20*100);
+let overallRisk=Math.round((tempRisk+humRisk+airRisk+noiseRisk)/4);
 
-if(wellness>=80){
-document.getElementById('status').innerHTML='🟢 ปลอดภัย';
-}else if(wellness>=60){
-document.getElementById('status').innerHTML='🟡 เฝ้าระวัง';
-}else{
-document.getElementById('status').innerHTML='🔴 เสี่ยง';
-}
+situation.innerHTML=`🌡️ อุณหภูมิ : ${Math.round(tempRisk)}%<br>
+💧 ความชื้น : ${Math.round(humRisk)}%<br>
+🌫️ คุณภาพอากาศ : ${Math.round(airRisk)}%<br>
+🔊 เสียงรบกวน : ${Math.round(noiseRisk)}%<hr>
+⚠️ Overall Risk : ${overallRisk}%<br>
+💚 Wellness Score : ${wellness}%`;
 
-let safe=wellness;
-let warning=Math.round((100-wellness)*0.6);
-let risk=100-safe-warning;
-
-safePercent.innerHTML=safe+'%';
-warnPercent.innerHTML=warning+'%';
-riskPercent.innerHTML=risk+'%';
-
-wr.innerHTML=safe+'%';
-sr.innerHTML=warning+'%';
-mr.innerHTML=risk+'%';
-
-let reasons=[];
-let rec=[];
-
+let reasons=[], rec=[];
 if(temp>32){reasons.push('อุณหภูมิสูง');rec.push('🌡️ เปิดเครื่องปรับอากาศ');}
 if(hum>80){reasons.push('ความชื้นสูง');rec.push('💧 ลดความชื้น');}
 if(air>400){reasons.push('คุณภาพอากาศต่ำ');rec.push('🌫️ เปิดหน้าต่างระบายอากาศ');}
 if(noise>60){reasons.push('เสียงรบกวนสูง');rec.push('🔊 ลดระดับเสียง');}
 
-if(wellness<70){
-rec.push('❤️ พักสายตา 5 นาที');
-rec.push('🥤 ดื่มน้ำ 1 แก้ว');
-}
+analysis.innerHTML=reasons.length?('✓ '+reasons.join('<br>✓ ')):'AI ประเมินว่าสภาพแวดล้อมเหมาะสม';
+recommend.innerHTML=rec.length?rec.join('<br>'):'✅ สภาพแวดล้อมเหมาะสม';
 
-analysis.innerHTML = reasons.length===0
-? 'AI ประเมินว่าสภาพแวดล้อมอยู่ในระดับเหมาะสม'
-: 'AI ตรวจพบ<br>✓ '+reasons.join('<br>✓ ');
+let safe=wellness;
+let warn=Math.round((100-wellness)*0.6);
+let risk=100-safe-warn;
 
-recommend.innerHTML = rec.length===0
-? '✅ สภาพแวดล้อมเหมาะสม'
-: rec.join('<br>');
+safePercent.innerHTML=safe+'%';
+warnPercent.innerHTML=warn+'%';
+riskPercent.innerHTML=risk+'%';
 
-let now=new Date().toLocaleTimeString();
-chart.data.labels.push(now);
+wr.innerHTML=safe+'%'; sr.innerHTML=warn+'%'; rr.innerHTML=risk+'%';
+
+status.innerHTML=wellness>=80?'🟢 ปลอดภัย':wellness>=60?'🟡 เฝ้าระวัง':'🔴 เสี่ยง';
+
+let t=new Date().toLocaleTimeString();
+chart.data.labels.push(t);
 chart.data.datasets[0].data.push(wellness);
-
-if(chart.data.labels.length>15){
-chart.data.labels.shift();
-chart.data.datasets[0].data.shift();
-}
-
+if(chart.data.labels.length>15){chart.data.labels.shift();chart.data.datasets[0].data.shift();}
 chart.update();
 }
-
 setInterval(updateDashboard,2000);
 updateDashboard();
 </script>
